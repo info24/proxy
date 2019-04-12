@@ -1,0 +1,52 @@
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from werkzeug.serving import ThreadedWSGIServer
+
+from werkzeug.wsgi import SharedDataMiddleware
+
+from socketserver import StreamRequestHandler, ThreadingTCPServer, BaseRequestHandler
+
+# if hasattr(selectors, 'PollSelector'):
+#     _ServerSelector = selectors.PollSelector
+# else:
+#     _ServerSelector = selectors.SelectSelector
+
+'''
+多线程HTTP服务器
+MyHTTPRequestHandler.handle 会处理，并开多一个线程等待接收数据
+'''
+class MyHTTPRequestHandler(BaseRequestHandler):
+	'''
+		自己写的requesthandle只需要重写handle方法去处理请求
+	'''
+	def handle(self):
+		print("beging")
+		data = self.request.recv(10240)
+		print('data: ', data)
+def thread_run():
+	'''
+		两个客户端测试：
+			1.第一个连接进来， 打印begin，
+			2.第二个连接进来，也打印begin
+
+	'''
+	aa = ThreadingTCPServer(('0.0.0.0', 9992), MyHTTPRequestHandler)
+	aa.serve_forever()
+
+
+def run():
+	'''
+	客户端代码:
+	s = socket.socket()
+	s.connect(('127.0.0.1', 9991))
+	s.sendall(b"hello)
+
+		测试，两个客户端连接，
+			1.第一个接进来先打印begin, 然后进入等待
+			2.第二个连接进来， 不会打印任何东西，然后发送数据
+			3.第一个连接发送数据， 服务端已经打印，接下来就可以打印第二连接的数据
+
+	'''
+	aa = HTTPServer(('0.0.0.0', 9991), MyHTTPRequestHandler)
+	aa.serve_forever()
+
+run()
