@@ -1,0 +1,109 @@
+<html>
+    
+        
+    <head>
+            <meta charset="UTF-8">
+            <title>Three框架</title>
+            <script src="https://wow.techbrood.com/libs/three.r73.js"></script>
+            <style type="text/css">
+                #canvas-frame {
+                    border: none;
+                    cursor: pointer;
+                    width: 400px;
+                    height: 400px;
+                    background-color: #EEEEEE;
+                }
+
+            </style>
+            <script>
+              function onload(){
+
+                let scene = new THREE.Scene();
+
+                let camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
+                camera.position.x = 3;
+                camera.position.y = 3;
+                camera.position.z = 3;
+                // camera.up.x = 1
+                // camera.up.y = 0
+                camera.lookAt({
+                    x: 0,
+                    y: 1,
+                    z: 0
+                })
+         
+
+                let renderer = new THREE.WebGLRenderer();
+
+                renderer.setSize(1000, 400);
+
+                var aaa = document.getElementById('canvas-frame')
+                console.log(aaa)
+                aaa.appendChild(renderer.domElement);
+
+                // x轴
+                function linexFun(){
+                    var material = new THREE.LineBasicMaterial({
+                        color: 0xFF0000
+                        // 红色
+                    });
+
+                    var geometry = new THREE.Geometry();
+                    geometry.vertices.push(
+                        new THREE.Vector3(-10, 0, 0),
+                        new THREE.Vector3(10, 0, 0),
+                    );
+
+                    var line = new THREE.Line(geometry, material);
+                    scene.add(line);
+                }
+                linexFun()
+                // y轴
+                function lineyFun(){
+                    var material = new THREE.LineBasicMaterial({
+                        color: 0xFFFF00
+                        // 黄色
+                    });
+
+                    var geometry = new THREE.Geometry();
+                    geometry.vertices.push(
+                        new THREE.Vector3(0, -10, 0),
+                        new THREE.Vector3(0, 10, 0),
+                    );
+
+                    var line = new THREE.Line(geometry, material);
+                    scene.add(line);
+                }
+                lineyFun();
+                // z轴
+                function linezFun(){
+                    var material = new THREE.LineBasicMaterial({
+                        color: 0x0000FF
+                        // 蓝色
+                    });
+
+                    var geometry = new THREE.Geometry();
+                    geometry.vertices.push(
+                        new THREE.Vector3(0, 0, -10),
+                        new THREE.Vector3(0, 0, 10),
+                    );
+
+                    var line = new THREE.Line(geometry, material);
+                    scene.add(line);
+                }
+                linezFun();
+            
+                function render() {
+                    requestAnimationFrame(render);
+                    renderer.render(scene, camera);
+                }
+                render();
+               }
+            </script>
+        </head>
+
+        <body onload='onload();'>
+            <div id="canvas-frame"></div>
+        </body>
+
+</html>
