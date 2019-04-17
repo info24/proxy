@@ -42,3 +42,36 @@ def side_effect(arg):
 foo = mock.Mock(side_effect=side_effect)
 foo('a')    # 1
 
+
+'''
+例子讲解
+'''
+def get():
+    return 622
+def get_new_jobid():
+    return 623
+
+def put_event(a):
+    print('put_event')
+
+def get_ip(a):
+    return "172.16.1.1"
+
+def get_text(a):
+    return '1,2,3,3,4,5'
+def write(a):
+    pass
+
+@mock.patch('dbjobs.get_last_id', get)
+@mock.patch('dbjobs.get_new_jobid', get_new_jobid)
+@mock.patch('dbjobs.put_event', put_event)
+@mock.patch('dbjobs.get_ip', get_ip)
+@mock.patch('dbjobs.get_text', get_text)
+@mock.patch('dbjobs.write', write)
+def run1():
+    '''
+    run()函数里有很多调用函数如，get_last_id， get_new_jobid, put_event等等，
+    如果这些函数的调用可能存在问题，那么，我们就可以用mock.patch来mock这些函数，
+    这样，它就直接调用我们定义的函数
+    '''
+    r = run()
